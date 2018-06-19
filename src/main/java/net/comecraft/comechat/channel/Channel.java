@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import com.google.common.collect.ImmutableSet;
 
 import net.comecraft.comechat.format.ChatFormatTemplate;
-import net.comecraft.comechat.message.ChatMessage;
 
 /**
  * Represents a stream of Messages that can be read or posted to.
@@ -36,10 +35,12 @@ public interface Channel {
 	
 	/**
 	 * Sends a message to all members of the channel.
+	 * Should pipe the message text to all chat formatters and send the message
+	 * to each receiver.
 	 * @param sender The sender of the message.
 	 * @param message The message to send.
 	 */
-	public void sendMessage(CommandSender sender, ChatMessage message);
+	public void sendMessage(CommandSender sender, String message);
 	
 	/**
 	 * Get the formatting template used to format messages in this Channel.
