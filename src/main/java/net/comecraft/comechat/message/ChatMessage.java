@@ -2,6 +2,9 @@ package net.comecraft.comechat.message;
 
 import org.bukkit.command.CommandSender;
 
+/**
+ * Represents a single chat message between two entities.
+ */
 public interface ChatMessage {
 	
 	/**

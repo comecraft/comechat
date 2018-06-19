@@ -1,10 +1,10 @@
 package net.comecraft.comechat.channel;
 
-import java.util.Set;
-
 import org.bukkit.command.CommandSender;
 
-import net.comecraft.comechat.message.ChatFormat;
+import com.google.common.collect.ImmutableSet;
+
+import net.comecraft.comechat.format.ChatFormatTemplate;
 import net.comecraft.comechat.message.ChatMessage;
 
 /**
@@ -14,10 +14,11 @@ public interface Channel {
 
 	/**
 	 * Gets a set containing all CommandSenders who will be shown messages
-	 * from this channel.
+	 * from this channel. The set should be immutable. If you want to add or
+	 * remove members from this channel use addMember() or removeMember() respectively.
 	 * @return A set containing the members of this Channel.
 	 */
-	public Set<CommandSender> getMembers();
+	public ImmutableSet<CommandSender> getMembers();
 	
 	/**
 	 * Removes a member from the channel if it is present.
@@ -41,8 +42,8 @@ public interface Channel {
 	public void sendMessage(CommandSender sender, ChatMessage message);
 	
 	/**
-	 * Get the formatter used to format messages in this Channel.
+	 * Get the formatting template used to format messages in this Channel.
 	 * @return The ChatFormat used by this Channel.
 	 */
-	public ChatFormat getFormat();
+	public ChatFormatTemplate getFormat();
 }
