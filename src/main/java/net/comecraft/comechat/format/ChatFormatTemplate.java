@@ -1,12 +1,11 @@
 package net.comecraft.comechat.format;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Represents a template that organizes ChatAffixes in a ChatMessage.
  */
-public interface ChatFormatTemplate extends Serializable {
+public interface ChatFormatTemplate {
 
 	/**
 	 * Gets the list of affixes that make up this template.

@@ -1,7 +1,5 @@
 package net.comecraft.comechat.format;
 
-import java.io.Serializable;
-
 import org.bukkit.command.CommandSender;
 
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -11,7 +9,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * player clan tag, player rank, or whether the player is in jail. Serializes to JSON
  * format.
  */
-public interface ChatAffix extends Serializable {
+public interface ChatAffix {
 
 	/**
 	 * Parse all placeholders and generate a ready-to-attach BaseComponent.
