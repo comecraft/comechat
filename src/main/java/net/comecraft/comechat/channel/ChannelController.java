@@ -67,7 +67,19 @@ public final class ChannelController {
 	 * @return <tt>false</tt> if the sender's active channel did not change.
 	 */
 	public boolean setActiveChannel(CommandSender sender, Channel channel) {
-		// TODO
+		
+		if (!sender.hasPermission(channel.getWritePerm())) {
+			// TODO notify sender they were denied
+			return false;
+		}
+		
+		Channel oldChannel = activeChannels.put(sender, channel);
+		if (oldChannel.equals(channel)) {
+			// TODO notify sender they are already talking in channel
+			return false;
+		}
+		
+		// TODO notify sender that they are now talking in channel.
 		return true;
 	}
 	
