@@ -5,28 +5,26 @@ import java.util.Set;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.Permission;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.comecraft.comechat.format.ChatFormatTemplate;
+import net.comecraft.comechat.format.FormatTemplate;
+import net.comecraft.comechat.message.MessagePipe;
+import net.comecraft.comechat.message.MessageSupplier;
 
 /**
- * Channel represents a set of message pipes that can be reached by a
- * command or alias. When a user tries to speak in a specified channel, for
- * example by using /g for global chat or /f for faction chat, the
- * Channel checks their permissions, location, faction, world, etc.
- * and sends them to the correct pipe. <br>
+ * Channel represents a set of message pipes that can be reached by a command or
+ * alias. When a user tries to speak in a specified channel, for example by
+ * using /g for global chat or /f for faction chat, the Channel checks their
+ * permissions, location, faction, world, etc. and sends them to the correct
+ * pipe. <br>
  * <br>
- * The Channel should listen for events that would result in a channel
- * change. For example, a world-only chat should listen for a world change, and
- * a faction chat should listen for a faction change.
+ * The Channel should listen for events that would result in a channel change.
+ * For example, a world-only chat should listen for a world change, and a
+ * faction chat should listen for a faction change.
  */
-public abstract class Channel implements CommandExecutor, Listener {
+public abstract class Channel implements CommandExecutor {
 
 	/**
 	 * Gets the unique identifier for this channel.
@@ -37,27 +35,27 @@ public abstract class Channel implements CommandExecutor, Listener {
 
 	/**
 	 * Gets the aliases for this channel. Aliases are usually one or two characters
-	 * long and abbreviate the channel's ID. If you need to modify a
-	 * Channel's aliases, do so through Config, so that listeners and
-	 * command aliases can be updated.
+	 * long and abbreviate the channel's ID. If you need to modify a Channel's
+	 * aliases, do so through Config, so that listeners and command aliases can be
+	 * updated.
 	 * 
 	 * @return A set containing the aliases for this Channel.
 	 */
 	public abstract ImmutableSet<String> getAliases();
 
 	/**
-	 * Gets the pipes controlled by this Channel.
-	 * 
-	 * @return The set of Channels that is controlled by this Channel.
+	 * Gets the outgoing pipe for a particular sender in this channel.
+	 * @param sender The sender to get the outgoing pipe for.
+	 * @return A MessagePipe for outgoing messages from a particular sender.
 	 */
-	public abstract ImmutableSet<MessagePipe> getChannels();
+	public abstract MessagePipe pipe(CommandSender sender);
 
 	/**
-	 * Get the format template for this Channel
+	 * Gets the format template for this Channel
 	 * 
 	 * @return The ChatFormatTemplate used by this Channel.
 	 */
-	public abstract ChatFormatTemplate getTemplate();
+	public abstract FormatTemplate getTemplate();
 
 	/**
 	 * Gets the permission required to read messages in this channel.
@@ -148,19 +146,22 @@ public abstract class Channel implements CommandExecutor, Listener {
 	public abstract Set<CommandSender> getDeafened();
 
 	/**
-	 * Sends a message to the appropriate channel.
+	 * Sends a message to the appropriate receivers.
 	 * 
 	 * @param sender
 	 *            The sender of the message.
 	 * @param message
 	 *            The raw input text of the message.
 	 */
-	public abstract void sendMessage(CommandSender sender, String message);
+	public void sendMessage(CommandSender sender, String message) {
+		MessageSupplier supplier = getTemplate().getSupplier(sender, message);
+		pipe(sender).sendMessage(supplier);
+	}
 
 	/**
- 	 * If no chat message is included in the arguments, try to change
-	 * this to the sender's active channel. If a chat message is included in the
-	 * arguments, try to send that message.
+	 * If no chat message is included in the arguments, try to change this to the
+	 * sender's active channel. If a chat message is included in the arguments, try
+	 * to send that message.
 	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -183,24 +184,6 @@ public abstract class Channel implements CommandExecutor, Listener {
 		return true;
 	}
 
-	/**
-	 * On player join, put that player into the correct pipe.
-	 * 
-	 * @param event
-	 *            The PlayerJoinEvent fired by the player joining the server.
-	 */
-	@EventHandler
-	public abstract void onPlayerJoin(PlayerJoinEvent event);
-
-	/**
-	 * On player leave, remove that player from any pipes.
-	 * 
-	 * @param event
-	 *            The PlayerQuitEvent fired by the player leaving the server.
-	 */
-	@EventHandler
-	public abstract void onPlayerQuit(PlayerQuitEvent event);
-
 	@Override
 	public int hashCode() {
 		return getId().hashCode();
@@ -215,6 +198,6 @@ public abstract class Channel implements CommandExecutor, Listener {
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		return getId().equals(((ChatFormatTemplate) obj).getId());
+		return getId().equals(((FormatTemplate) obj).getId());
 	}
 }
