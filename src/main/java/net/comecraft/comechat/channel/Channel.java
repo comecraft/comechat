@@ -5,10 +5,9 @@ import java.util.Set;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
-
 import com.google.common.collect.ImmutableSet;
 
+import net.comecraft.comechat.config.ChannelConfiguration;
 import net.comecraft.comechat.format.FormatTemplate;
 import net.comecraft.comechat.message.MessagePipe;
 import net.comecraft.comechat.message.MessageSupplier;
@@ -22,12 +21,20 @@ import net.comecraft.comechat.message.MessageSupplier;
  */
 public abstract class Channel implements CommandExecutor {
 
+	private final ChannelConfiguration config;
+	
+	Channel(ChannelConfiguration config) {
+		this.config = config;
+	}
+	
 	/**
 	 * Gets the unique identifier for this channel.
 	 * 
 	 * @return The unique ID for this channel.
 	 */
-	public abstract String getId();
+	public String getId() {
+		return config.channelId;
+	}
 
 	/**
 	 * Gets the aliases for this channel. Aliases are usually one or two characters
@@ -37,7 +44,9 @@ public abstract class Channel implements CommandExecutor {
 	 * 
 	 * @return A set containing the aliases for this Channel.
 	 */
-	public abstract ImmutableSet<String> getAliases();
+	public ImmutableSet<String> getAliases() {
+		return config.channelAliases;
+	}
 
 	/**
 	 * Gets the outgoing pipe for a particular sender in this channel.
@@ -51,21 +60,27 @@ public abstract class Channel implements CommandExecutor {
 	 * 
 	 * @return The ChatFormatTemplate used by this Channel.
 	 */
-	public abstract FormatTemplate getTemplate();
+	public FormatTemplate getTemplate() {
+		return config.format;
+	}
 
 	/**
 	 * Gets the permission required to read messages in this channel.
 	 * 
 	 * @return The Permission required to read messages in this channel.
 	 */
-	public abstract Permission getReadPerm();
+	public String getReadPerm() {
+		return config.readPermission;
+	}
 
 	/**
 	 * Gets the permission required to write messages in to channel.
 	 * 
 	 * @return The Permission required to write messages in to channel.
 	 */
-	public abstract Permission getWritePerm();
+	public String getWritePerm() {
+		return config.writePermission;
+	}
 
 	/**
 	 * Prevents a sender from sending messages to this channel. Silencing is
