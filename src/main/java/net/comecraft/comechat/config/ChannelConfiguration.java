@@ -23,15 +23,15 @@ public class ChannelConfiguration {
 	private static final File defaultConfig = null; // TODO add default config
 
 	// Identifiers
-	@Expose private String channelType;
-	@Expose private String channelId;
-	@Expose private String[] channelAliases;
+	@Expose public String channelType;
+	@Expose public String channelId;
+	@Expose public String[] channelAliases;
 
 	// Permissions
-	@Expose private String readPermission;
-	@Expose private String writePermission;
+	@Expose public String readPermission;
+	@Expose public String writePermission;
 
-	@Expose private FormatTemplate format;
+	@Expose public FormatTemplate format;
 
 	// TODO add save config method
 	
