@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
  */
 public final class GlobalMessagePipe implements MessagePipe {
 
-	private GlobalMessagePipe globalPipe = null;
+	private static GlobalMessagePipe globalPipe = null;
 	
 	/**
 	 * Gets the global message pipe.
 	 * @return The global message pipe.
 	 */
-	public GlobalMessagePipe get() {
+	public static GlobalMessagePipe get() {
 		if (globalPipe == null) globalPipe = new GlobalMessagePipe();
 		return globalPipe;
 	}
