@@ -75,7 +75,9 @@ public abstract class Channel implements CommandExecutor {
 	 *            The sender to silence.
 	 * @return <tt>true</tt> if the sender was not already silenced.
 	 */
-	public abstract boolean silence(CommandSender mutee);
+	public boolean silence(CommandSender mutee) {
+		return getSilenced().add(mutee);
+	}
 
 	/**
 	 * Unsilences a sender. Silencing is different from lack of write permission.
@@ -84,7 +86,9 @@ public abstract class Channel implements CommandExecutor {
 	 *            The sender to unsilence.
 	 * @return <tt>true</tt> if the sender was previously silenced.
 	 */
-	public abstract boolean unSilence(CommandSender mutee);
+	public boolean unSilence(CommandSender mutee) {
+		return getSilenced().remove(mutee);
+	}
 
 	/**
 	 * Checks whether a sender is silenced. Silencing is different from lack of
@@ -94,7 +98,9 @@ public abstract class Channel implements CommandExecutor {
 	 *            The sender to check.
 	 * @return <tt>true</tt> if the sender is silenced.
 	 */
-	public abstract boolean isSilenced(CommandSender mutee);
+	public boolean isSilenced(CommandSender mutee) {
+		return getSilenced().contains(mutee);
+	}
 
 	/**
 	 * Gets the senders who are silenced from this channel. Silencing is different
@@ -112,7 +118,9 @@ public abstract class Channel implements CommandExecutor {
 	 *            The sender to deafen.
 	 * @return <tt>true</tt> if the sender was not already deafened.
 	 */
-	public abstract boolean deafen(CommandSender muter);
+	public boolean deafen(CommandSender muter) {
+		return getDeafened().add(muter);
+	}
 
 	/**
 	 * Undeafens a sender. Deafening is different from lack of read permission.
@@ -121,7 +129,9 @@ public abstract class Channel implements CommandExecutor {
 	 *            The sender to undeafen.
 	 * @return <tt>true</tt> if the sender was previously deafened.
 	 */
-	public abstract boolean unDeafen(CommandSender muter);
+	public boolean unDeafen(CommandSender muter) {
+		return getDeafened().remove(muter);
+	}
 
 	/**
 	 * Checks whether a sender is deafened. Deafening is different from lack of read
@@ -131,7 +141,9 @@ public abstract class Channel implements CommandExecutor {
 	 *            The sender to check.
 	 * @return <tt>true</tt> if the sender is deafened.
 	 */
-	public abstract boolean isDeafened(CommandSender muter);
+	public boolean isDeafened(CommandSender muter) {
+		return getDeafened().contains(muter);
+	}
 
 	/**
 	 * Gets the senders who are deafened from this channel. Deafening is different
