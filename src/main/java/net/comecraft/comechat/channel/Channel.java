@@ -1,5 +1,6 @@
 package net.comecraft.comechat.channel;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.command.Command;
@@ -25,6 +26,8 @@ public abstract class Channel implements CommandExecutor {
 	
 	Channel(ChannelConfiguration config) {
 		this.config = config;
+		this.silenced = new HashSet<CommandSender>();
+		this.deafened = new HashSet<CommandSender>();
 	}
 	
 	/**
@@ -123,7 +126,11 @@ public abstract class Channel implements CommandExecutor {
 	 * 
 	 * @return A set containing this channel's silenced senders.
 	 */
-	public abstract Set<CommandSender> getSilenced();
+	public Set<CommandSender> getSilenced() {
+		return silenced;
+	}
+	
+	private final Set<CommandSender> silenced;
 
 	/**
 	 * Prevents a sender from viewing messages sent to this channel. Deafening is
@@ -166,7 +173,11 @@ public abstract class Channel implements CommandExecutor {
 	 * 
 	 * @return A set containing this channel's deafened senders.
 	 */
-	public abstract Set<CommandSender> getDeafened();
+	public Set<CommandSender> getDeafened() {
+		return deafened;
+	}
+	
+	private final Set<CommandSender> deafened;
 
 	/**
 	 * Sends a message to the appropriate receivers.
