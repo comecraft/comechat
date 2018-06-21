@@ -155,9 +155,17 @@ public abstract class Channel implements CommandExecutor {
 			// TODO notify the sender that they are silenced.
 			return;
 		}
-		
+
+		// Get the message supplier from the format template
 		MessageSupplier supplier = getTemplate().getSupplier(sender, message);
-		outgoingPipe(sender).sendMessage(supplier);
+
+		outgoingPipe(sender)
+
+				// Filter out receivers that don't have read permission for this channel.
+				.filter(r -> r.hasPermission(getReadPerm()))
+
+				// Send the message.
+				.sendMessage(supplier);
 	}
 
 	/**
