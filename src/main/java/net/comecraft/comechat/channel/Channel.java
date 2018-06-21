@@ -24,6 +24,10 @@ public abstract class Channel implements CommandExecutor {
 
 	private final ChannelConfiguration config;
 	
+	/**
+	 * Creates a new channel from a ChannelConfiguration.
+	 * @param config The ChannelConfiguration to create this channel from.
+	 */
 	Channel(ChannelConfiguration config) {
 		this.config = config;
 		this.silenced = new HashSet<CommandSender>();
