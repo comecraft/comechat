@@ -18,11 +18,7 @@ import net.comecraft.comechat.message.MessageSupplier;
  * alias. When a user tries to speak in a specified channel, for example by
  * using /g for global chat or /f for faction chat, the Channel checks their
  * permissions, location, faction, world, etc. and sends them to the correct
- * pipe. <br>
- * <br>
- * The Channel should listen for events that would result in a channel change.
- * For example, a world-only chat should listen for a world change, and a
- * faction chat should listen for a faction change.
+ * pipe.
  */
 public abstract class Channel implements CommandExecutor {
 
@@ -48,7 +44,7 @@ public abstract class Channel implements CommandExecutor {
 	 * @param sender The sender to get the outgoing pipe for.
 	 * @return A MessagePipe for outgoing messages from a particular sender.
 	 */
-	public abstract MessagePipe pipe(CommandSender sender);
+	public abstract MessagePipe outgoingPipe(CommandSender sender);
 
 	/**
 	 * Gets the format template for this Channel
@@ -155,7 +151,7 @@ public abstract class Channel implements CommandExecutor {
 	 */
 	public void sendMessage(CommandSender sender, String message) {
 		MessageSupplier supplier = getTemplate().getSupplier(sender, message);
-		pipe(sender).sendMessage(supplier);
+		outgoingPipe(sender).sendMessage(supplier);
 	}
 
 	/**
