@@ -173,8 +173,7 @@ public abstract class Channel implements CommandExecutor {
 	 * sender's active channel. If a chat message is included in the arguments, try
 	 * to send that message.
 	 */
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String message) {
 
 		//Check sender write permission
 		if (!sender.hasPermission(getWritePerm())) {
@@ -186,7 +185,7 @@ public abstract class Channel implements CommandExecutor {
 		// TODO If the sender is silenced from this channel, notify them.
 
 		// No additional arguments result in a channel change.
-		if (args.length == 0) {
+		if (message.length() == 0) {
 			// TODO Change active channel of sender
 			// TODO Notify sender that they have changed channels
 			// TODO Add channel change message to lang file
@@ -195,8 +194,13 @@ public abstract class Channel implements CommandExecutor {
 		}
 
 		// Send the message.
-		sendMessage(sender, String.join(" ", args));
+		sendMessage(sender, message);
 		return true;
+	}
+	
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		return onCommand(sender, command, label, String.join(" ", args));
 	}
 
 	@Override
