@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * GlobalMessagePipe pipes members to all online players, as well as the
+ * GlobalMessagePipe pipes messages to all online players, as well as the
  * plugin's chat logger.
  */
 public final class GlobalMessagePipe implements MessagePipe {
