@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -25,7 +26,7 @@ public class ChannelConfiguration {
 	// Identifiers
 	@Expose public String channelType;
 	@Expose public String channelId;
-	@Expose public String[] channelAliases;
+	@Expose public ImmutableSet<String> channelAliases;
 
 	// Permissions
 	@Expose public String readPermission;
