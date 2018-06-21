@@ -150,6 +150,12 @@ public abstract class Channel implements CommandExecutor {
 	 *            The raw input text of the message.
 	 */
 	public void sendMessage(CommandSender sender, String message) {
+		
+		if (isSilenced(sender)) {
+			// TODO notify the sender that they are silenced.
+			return;
+		}
+		
 		MessageSupplier supplier = getTemplate().getSupplier(sender, message);
 		outgoingPipe(sender).sendMessage(supplier);
 	}
@@ -161,12 +167,17 @@ public abstract class Channel implements CommandExecutor {
 	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		// TODO Check sender perms
+
+		//Check sender write permission
+		if (!sender.hasPermission(getWritePerm())) {
+			// TODO notify sender they don't have permission
+			return true;
+		}
 
 		// TODO If the sender has this channel deafened, undeafen it.
 		// TODO If the sender is silenced from this channel, notify them.
 
-		// Channel change
+		// No additional arguments result in a channel change.
 		if (args.length == 0) {
 			// TODO Change active channel of sender
 			// TODO Notify sender that they have changed channels
