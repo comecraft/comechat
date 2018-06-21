@@ -1,5 +1,6 @@
 package net.comecraft.comechat.message;
 
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.bukkit.command.CommandSender;
@@ -11,19 +12,20 @@ public interface MessagePipe {
 
 	/**
 	 * Gets the stream of receivers for this pipe.
+	 * 
 	 * @return The stream of receivers for this pipe.
 	 */
 	public Stream<CommandSender> receivers();
 
 	/**
 	 * Sends a message to all receivers of the pipe.
+	 * 
 	 * @param messageSupplier
 	 *            The supplier to provide messages to the pipe.
 	 */
 	public default void sendMessage(MessageSupplier supplier) {
-		receivers()
-		.map(supplier::get) // Get a ChatMessage for each receiver.
-		.forEach(ChatMessage::send); // Send each message.
+		receivers().map(supplier::get) // Get a ChatMessage for each receiver.
+				.forEach(ChatMessage::send); // Send each message.
 	}
 
 	/**
@@ -66,6 +68,24 @@ public interface MessagePipe {
 				return Stream.concat(MessagePipe.this.receivers(), otherPipe.receivers()).distinct();
 			}
 		};
+	}
 
+	/**
+	 * Returns a MessagePipe that will send to receivers of this pipe that match the
+	 * given predicate.
+	 * 
+	 * @param predicate
+	 *            A predicate to apply to each receiver to determine if they should
+	 *            be included.
+	 * @return The new pipe.
+	 */
+	public default MessagePipe filter(Predicate<? super CommandSender> predicate) {
+		return new MessagePipe() {
+
+			@Override
+			public Stream<CommandSender> receivers() {
+				return MessagePipe.this.receivers().filter(predicate);
+			}
+		};
 	}
 }
