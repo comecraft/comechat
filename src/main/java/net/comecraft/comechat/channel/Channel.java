@@ -163,7 +163,7 @@ public abstract class Channel implements CommandExecutor {
 	 * Checks whether a sender is deafened. Deafening is different from lack of read
 	 * permission.
 	 * 
-	 * @param mutee
+	 * @param muter
 	 *            The sender to check.
 	 * @return <tt>true</tt> if the sender is deafened.
 	 */
@@ -214,6 +214,11 @@ public abstract class Channel implements CommandExecutor {
 	 * If no chat message is included in the arguments, try to change this to the
 	 * sender's active channel. If a chat message is included in the arguments, try
 	 * to send that message.
+	 * @param sender The sender of the command
+	 * @param command The command which was sent
+	 * @param label The command alias used to send the command
+	 * @param message The message content of the command
+	 * @return <tt>true</tt> if the usage of the command was correct.
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String message) {
 
@@ -253,7 +258,7 @@ public abstract class Channel implements CommandExecutor {
 	/**
 	 * Only checks that the IDs of the two objects are equal.
 	 * 
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(Object obj) {

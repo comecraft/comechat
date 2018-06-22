@@ -20,7 +20,7 @@ public interface MessagePipe {
 	/**
 	 * Sends a message to all receivers of the pipe.
 	 * 
-	 * @param messageSupplier
+	 * @param supplier
 	 *            The supplier to provide messages to the pipe.
 	 */
 	public default void sendMessage(MessageSupplier supplier) {
