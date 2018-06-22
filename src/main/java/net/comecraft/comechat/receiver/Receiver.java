@@ -1,4 +1,4 @@
-package receiver;
+package net.comecraft.comechat.receiver;
 
 import net.comecraft.comechat.message.ChatMessage;
 
