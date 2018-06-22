@@ -1,11 +1,9 @@
-package net.comecraft.comechat.receiver;
-
-import net.comecraft.comechat.message.ChatMessage;
+package net.comecraft.comechat.message;
 
 /**
  * Represents any entity that could receive a message.
  */
-public interface Receiver {
+public interface MessageReceiver {
 
 	/**
 	 * Receive a message. The default implementation should work for spigot
