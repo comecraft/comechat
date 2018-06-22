@@ -6,13 +6,12 @@ package net.comecraft.comechat.message;
 public interface MessageReceiver {
 
 	/**
-	 * Receive a message. The default implementation should work for spigot
-	 * players.
+	 * Receive a message.
 	 * 
 	 * @param message
 	 *            The message to send.
 	 */
-	public default void receive(ChatMessage message) {
+	public default void sendMessage(ChatMessage message) {
 
 	}
 }
