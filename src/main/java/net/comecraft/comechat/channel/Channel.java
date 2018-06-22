@@ -159,6 +159,7 @@ public abstract class Channel implements CommandExecutor {
 	 * @return <tt>true</tt> if the sender was previously deafened.
 	 */
 	public boolean unDeafen(CommandSender muter) {
+		// TODO notify the muter that they have undeafened this channel.
 		return getDeafened().remove(muter);
 	}
 
@@ -216,7 +217,7 @@ public abstract class Channel implements CommandExecutor {
 						// Filter out players without read permission.
 						if (!p.hasPermission(getReadPerm())) return false;
 						
-						// Filter out players who have this channel deafended.
+						// Filter out players who have this channel deafened.
 						if (isDeafened(p)) return false;
 					}
 					
@@ -245,8 +246,10 @@ public abstract class Channel implements CommandExecutor {
 			return true;
 		}
 
-		// TODO If the sender has this channel deafened, undeafen it.
-		// TODO If the sender is silenced from this channel, notify them.
+		// If the sender has this channel deafened, undeafen them.
+		if (isDeafened(sender)) {
+			unDeafen(sender);
+		}
 
 		// No additional arguments result in a channel change.
 		if (message.length() == 0) {
