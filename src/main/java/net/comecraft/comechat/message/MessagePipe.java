@@ -8,14 +8,14 @@ import org.bukkit.command.CommandSender;
 /**
  * Represents a stream of Messages that can be read or posted to.
  */
-public interface MessagePipe {
+public abstract class MessagePipe {
 
 	/**
 	 * Gets the stream of receivers for this pipe.
 	 * 
 	 * @return The stream of receivers for this pipe.
 	 */
-	public Stream<CommandSender> receivers();
+	public abstract Stream<CommandSender> receivers();
 
 	/**
 	 * Sends a message to all receivers of the pipe.
@@ -23,7 +23,7 @@ public interface MessagePipe {
 	 * @param supplier
 	 *            The supplier to provide messages to the pipe.
 	 */
-	public default void sendMessage(MessageSupplier supplier) {
+	public void sendMessage(MessageSupplier supplier) {
 		receivers().map(supplier::get) // Get a ChatMessage for each receiver.
 				.forEach(ChatMessage::send); // Send each message.
 	}
@@ -37,7 +37,7 @@ public interface MessagePipe {
 	 * @return A MessagePipe that only sends messages to receivers of this and the
 	 *         other pipe.
 	 */
-	public default MessagePipe intersect(MessagePipe otherPipe) {
+	public final MessagePipe intersect(MessagePipe otherPipe) {
 		return new MessagePipe() {
 
 			@Override
@@ -59,7 +59,7 @@ public interface MessagePipe {
 	 * @return A MessagePipe that sends messages to receivers of this pipe and
 	 *         receivers of the other pipe.
 	 */
-	public default MessagePipe union(MessagePipe otherPipe) {
+	public final MessagePipe union(MessagePipe otherPipe) {
 		return new MessagePipe() {
 
 			@Override
@@ -79,7 +79,7 @@ public interface MessagePipe {
 	 *            be included.
 	 * @return The new pipe.
 	 */
-	public default MessagePipe filter(Predicate<? super CommandSender> predicate) {
+	public final MessagePipe filter(Predicate<? super CommandSender> predicate) {
 		return new MessagePipe() {
 
 			@Override

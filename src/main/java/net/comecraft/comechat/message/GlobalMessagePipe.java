@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
  * GlobalMessagePipe pipes messages to all online players, as well as the
  * plugin's chat logger.
  */
-public final class GlobalMessagePipe implements MessagePipe {
+public final class GlobalMessagePipe extends MessagePipe {
 
 	private static GlobalMessagePipe globalPipe = null;
 	
@@ -33,7 +33,6 @@ public final class GlobalMessagePipe implements MessagePipe {
 	/**
 	 * Gets a pipe containing all online players and comechat's chat logger.
 	 */
-	@Override
 	public Stream<CommandSender> receivers() {
 		return Bukkit.getServer().getOnlinePlayers().stream()
 
