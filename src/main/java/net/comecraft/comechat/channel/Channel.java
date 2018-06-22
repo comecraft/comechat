@@ -26,17 +26,19 @@ import net.comecraft.comechat.message.PlayerReceiver;
 public abstract class Channel implements CommandExecutor {
 
 	private final ChannelConfiguration config;
-	
+
 	/**
 	 * Creates a new channel from a ChannelConfiguration.
-	 * @param config The ChannelConfiguration to create this channel from.
+	 * 
+	 * @param config
+	 *            The ChannelConfiguration to create this channel from.
 	 */
 	Channel(ChannelConfiguration config) {
 		this.config = config;
 		this.silenced = new HashSet<CommandSender>();
 		this.deafened = new HashSet<CommandSender>();
 	}
-	
+
 	/**
 	 * Gets the unique identifier for this channel.
 	 * 
@@ -60,7 +62,9 @@ public abstract class Channel implements CommandExecutor {
 
 	/**
 	 * Gets the outgoing pipe for a particular sender in this channel.
-	 * @param sender The sender to get the outgoing pipe for.
+	 * 
+	 * @param sender
+	 *            The sender to get the outgoing pipe for.
 	 * @return A MessagePipe for outgoing messages from a particular sender.
 	 */
 	public abstract MessagePipe outgoingPipe(CommandSender sender);
@@ -136,7 +140,7 @@ public abstract class Channel implements CommandExecutor {
 	public Set<CommandSender> getSilenced() {
 		return silenced;
 	}
-	
+
 	private final Set<CommandSender> silenced;
 
 	/**
@@ -184,7 +188,7 @@ public abstract class Channel implements CommandExecutor {
 	public Set<CommandSender> getDeafened() {
 		return deafened;
 	}
-	
+
 	private final Set<CommandSender> deafened;
 
 	/**
@@ -196,7 +200,7 @@ public abstract class Channel implements CommandExecutor {
 	 *            The raw input text of the message.
 	 */
 	public void sendMessage(CommandSender sender, String message) {
-		
+
 		if (isSilenced(sender)) {
 			// TODO notify the sender that they are silenced.
 			return;
@@ -209,18 +213,18 @@ public abstract class Channel implements CommandExecutor {
 
 				// Filter receivers that should receive the message
 				.filter(r -> {
-					
+
 					// Filter out players
 					if (r instanceof PlayerReceiver) {
 						Player p = ((PlayerReceiver) r).player();
-						
+
 						// Filter out players without read permission.
 						if (!p.hasPermission(getReadPerm())) return false;
-						
+
 						// Filter out players who have this channel deafened.
 						if (isDeafened(p)) return false;
 					}
-					
+
 					return true;
 				})
 
@@ -232,15 +236,20 @@ public abstract class Channel implements CommandExecutor {
 	 * If no chat message is included in the arguments, try to change this to the
 	 * sender's active channel. If a chat message is included in the arguments, try
 	 * to send that message.
-	 * @param sender The sender of the command
-	 * @param command The command which was sent
-	 * @param label The command alias used to send the command
-	 * @param message The message content of the command
+	 * 
+	 * @param sender
+	 *            The sender of the command
+	 * @param command
+	 *            The command which was sent
+	 * @param label
+	 *            The command alias used to send the command
+	 * @param message
+	 *            The message content of the command
 	 * @return <tt>true</tt> if the usage of the command was correct.
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String message) {
 
-		//Check sender write permission
+		// Check sender write permission
 		if (!sender.hasPermission(getWritePerm())) {
 			// TODO notify sender they don't have permission
 			return true;
@@ -264,7 +273,7 @@ public abstract class Channel implements CommandExecutor {
 		sendMessage(sender, message);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		return onCommand(sender, command, label, String.join(" ", args));
@@ -282,8 +291,7 @@ public abstract class Channel implements CommandExecutor {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
+		if (obj == null) return false;
 		return getId().equals(((FormatTemplate) obj).getId());
 	}
 }
