@@ -11,7 +11,5 @@ public interface MessageReceiver {
 	 * @param message
 	 *            The message to send.
 	 */
-	public default void sendMessage(ChatMessage message) {
-
-	}
+	public void receive(ChatMessage message);
 }

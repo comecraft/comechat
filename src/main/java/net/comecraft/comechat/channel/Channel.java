@@ -12,6 +12,7 @@ import net.comecraft.comechat.config.ChannelConfiguration;
 import net.comecraft.comechat.format.FormatTemplate;
 import net.comecraft.comechat.message.MessagePipe;
 import net.comecraft.comechat.message.MessageSupplier;
+import net.comecraft.comechat.message.PlayerReceiver;
 
 /**
  * Channel represents a set of message pipes that can be reached by a command or
@@ -204,7 +205,15 @@ public abstract class Channel implements CommandExecutor {
 		outgoingPipe(sender)
 
 				// Filter out receivers that don't have read permission for this channel.
-				.filter(r -> r.hasPermission(getReadPerm()))
+				.filter(r -> {
+					
+					// Only PlayerReceivers require permission
+					if (r instanceof PlayerReceiver) {
+						return ((PlayerReceiver) r).player().hasPermission(getReadPerm());
+					}
+					
+					return true;
+				})
 
 				// Send the message.
 				.sendMessage(supplier);

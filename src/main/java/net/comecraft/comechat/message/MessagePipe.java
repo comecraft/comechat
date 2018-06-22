@@ -3,8 +3,6 @@ package net.comecraft.comechat.message;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.bukkit.command.CommandSender;
-
 /**
  * Represents a stream of Messages that can be read or posted to.
  */
@@ -15,7 +13,7 @@ public abstract class MessagePipe {
 	 * 
 	 * @return The stream of receivers for this pipe.
 	 */
-	public abstract Stream<CommandSender> receivers();
+	public abstract Stream<MessageReceiver> receivers();
 
 	/**
 	 * Sends a message to all receivers of the pipe.
@@ -41,7 +39,7 @@ public abstract class MessagePipe {
 		return new MessagePipe() {
 
 			@Override
-			public Stream<CommandSender> receivers() {
+			public Stream<MessageReceiver> receivers() {
 				return MessagePipe.this.receivers().filter(s -> {
 					// Check if this receiver is also present in the other pipe.
 					return otherPipe.receivers().anyMatch(s::equals);
@@ -63,7 +61,7 @@ public abstract class MessagePipe {
 		return new MessagePipe() {
 
 			@Override
-			public Stream<CommandSender> receivers() {
+			public Stream<MessageReceiver> receivers() {
 				// Get all distinct elements of the addition of both pipes.
 				return Stream.concat(MessagePipe.this.receivers(), otherPipe.receivers()).distinct();
 			}
@@ -79,11 +77,11 @@ public abstract class MessagePipe {
 	 *            be included.
 	 * @return The new pipe.
 	 */
-	public final MessagePipe filter(Predicate<? super CommandSender> predicate) {
+	public final MessagePipe filter(Predicate<? super MessageReceiver> predicate) {
 		return new MessagePipe() {
 
 			@Override
-			public Stream<CommandSender> receivers() {
+			public Stream<MessageReceiver> receivers() {
 				return MessagePipe.this.receivers().filter(predicate);
 			}
 		};

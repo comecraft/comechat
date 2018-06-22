@@ -3,7 +3,6 @@ package net.comecraft.comechat.message;
 import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -33,11 +32,17 @@ public final class GlobalMessagePipe extends MessagePipe {
 	/**
 	 * Gets a pipe containing all online players and comechat's chat logger.
 	 */
-	public Stream<CommandSender> receivers() {
+	public Stream<MessageReceiver> receivers() {
 		return Bukkit.getServer().getOnlinePlayers().stream()
+				
+				// Get a MessageReceiver for each player.
+				.map(p -> new PlayerReceiver() {
 
-				// Cast <? extends Player> to Player
-				.map(p -> (Player) p);
+					@Override
+					public Player player() {
+						return p;
+					}	
+				});
 
 		// TODO add chat logger to this pipe
 	}
