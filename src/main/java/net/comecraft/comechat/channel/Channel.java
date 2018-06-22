@@ -6,6 +6,8 @@ import java.util.Set;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import com.google.common.collect.ImmutableSet;
 
 import net.comecraft.comechat.config.ChannelConfiguration;
@@ -204,12 +206,18 @@ public abstract class Channel implements CommandExecutor {
 
 		outgoingPipe(sender)
 
-				// Filter out receivers that don't have read permission for this channel.
+				// Filter receivers that should receive the message
 				.filter(r -> {
 					
-					// Only PlayerReceivers require permission
+					// Filter out players
 					if (r instanceof PlayerReceiver) {
-						return ((PlayerReceiver) r).player().hasPermission(getReadPerm());
+						Player p = ((PlayerReceiver) r).player();
+						
+						// Filter out players without read permission.
+						if (!p.hasPermission(getReadPerm())) return false;
+						
+						// Filter out players who have this channel deafended.
+						if (isDeafened(p)) return false;
 					}
 					
 					return true;
